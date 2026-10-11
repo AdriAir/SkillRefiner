@@ -1,0 +1,6 @@
+interface:
+  display_name: Skill Refiner
+  short_description: Review local skills and propose approved copy fixes
+  default_prompt: Use $skill-refiner to review the local skills I select and propose approved corrections in copies.
+policy:
+  allow_implicit_invocation: false

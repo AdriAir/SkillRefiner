@@ -1,0 +1,17 @@
+{
+  "name": "skill-refiner-marketplace",
+  "plugins": [
+    {
+      "name": "skill-refiner",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skill-refiner"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

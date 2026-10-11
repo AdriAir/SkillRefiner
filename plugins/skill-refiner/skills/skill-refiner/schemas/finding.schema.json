@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdriAir/SkillRefiner/schemas/finding.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string"
+    },
+    "path_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evidence": {
+      "type": "string"
+    },
+    "evidence_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "line": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "category": {
+      "enum": [
+        "security",
+        "quality",
+        "metadata",
+        "link",
+        "syntax",
+        "compatibility"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "verification": {
+      "enum": [
+        "verified",
+        "unverified"
+      ]
+    },
+    "provenance": {
+      "enum": [
+        "static",
+        "semantic"
+      ]
+    },
+    "dismissed": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "risk-accepted",
+            "dismissed"
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "status"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "rule",
+    "path",
+    "evidence",
+    "evidence_digest",
+    "line",
+    "category",
+    "severity",
+    "message",
+    "verification",
+    "provenance"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "skill-refiner",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Review local Codex skills and propose evidence-backed corrections in approved copies.",
+  "author": {
+    "name": "AdriAir"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Skill Refiner",
+        "shortDescription": "Review local skills and propose approved corrections.",
+        "longDescription": "Review the local skills I select against code, tests, and security rules, then propose exact corrections in new copies after approval.",
+        "developerName": "AdriAir",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "defaultPrompt": ["Review the local skills I select and propose approved corrections in copies."]
+      }
+    }
+  }
+}

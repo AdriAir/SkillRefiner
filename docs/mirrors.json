@@ -1,0 +1,15 @@
+{
+  "pairs": [
+    {"english": "AGENTS.md", "spanish": "AGENTS.es.md"},
+    {"english": "README.md", "spanish": "README.es.md"},
+    {"english": "LICENSE", "spanish": "LICENSE.es.md"},
+    {"english": "plugins/skill-refiner/LICENSE", "spanish": "plugins/skill-refiner/LICENSE.es.md"},
+    {"english": "plugins/skill-refiner/skills/skill-refiner/SKILL.md", "spanish": "plugins/skill-refiner/skills/skill-refiner/references/SKILL.es.md"},
+    {"english": "plugins/skill-refiner/skills/skill-refiner/references/workflow.md", "spanish": "plugins/skill-refiner/skills/skill-refiner/references/workflow.es.md"},
+    {"english": "plugins/skill-refiner/skills/skill-refiner/references/security.md", "spanish": "plugins/skill-refiner/skills/skill-refiner/references/security.es.md"},
+    {"english": "plugins/skill-refiner/skills/skill-refiner/references/architecture.md", "spanish": "plugins/skill-refiner/skills/skill-refiner/references/architecture.es.md"},
+    {"english": "docs/validation.md", "spanish": "docs/validation.es.md"}
+  ],
+  "section_marker": "<!-- section: id -->",
+  "canonical_language": "en"
+}

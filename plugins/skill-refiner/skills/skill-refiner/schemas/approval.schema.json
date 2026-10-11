@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdriAir/SkillRefiner/schemas/approval.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1"
+      ]
+    },
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$"
+    },
+    "base_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "proposal_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "decision": {
+      "enum": [
+        "apply",
+        "reject"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "approval_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "base_digest",
+    "proposal_digest",
+    "decision",
+    "reason",
+    "timestamp",
+    "approval_digest"
+  ],
+  "additionalProperties": false
+}

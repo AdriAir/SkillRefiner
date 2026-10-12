@@ -3,7 +3,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 from refinerlib.proposals import propose as build_proposal
+from refinerlib.runtime import runtime_issues
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +20,43 @@ def run_cli(*args: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         check=False,
     )
+
+
+def test_runtime_preflight_rejects_unsupported_python():
+    issues = runtime_issues(
+        python_version=(3, 11, 9),
+        installed_versions={"PyYAML": "6.0.3", "jsonschema": "4.25.1"},
+    )
+    assert issues == ("Python 3.12 or newer is required (found 3.11.9).",)
+
+
+@pytest.mark.parametrize(("installed_versions", "expected"), [
+    ({"PyYAML": None, "jsonschema": "4.25.1"}, "Required dependency PyYAML==6.0.3 is missing."),
+    ({"PyYAML": "6.0.3", "jsonschema": None}, "Required dependency jsonschema==4.25.1 is missing."),
+    ({"PyYAML": "6.0.2", "jsonschema": "4.25.1"}, "Required dependency PyYAML==6.0.3 is installed as 6.0.2."),
+    ({"PyYAML": "6.0.3", "jsonschema": "4.25.0"}, "Required dependency jsonschema==4.25.1 is installed as 4.25.0."),
+])
+def test_runtime_preflight_rejects_missing_or_mismatched_dependencies(installed_versions, expected):
+    issues = runtime_issues(
+        python_version=(3, 12, 0),
+        installed_versions=installed_versions,
+    )
+    assert issues == (expected,)
+
+
+def test_cli_reports_missing_dependencies_without_traceback():
+    result = subprocess.run(
+        [sys.executable, "-S", str(CLI), "profile"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 2
+    assert "jsonschema==4.25.1 is missing" in result.stderr
+    assert "PyYAML==6.0.3 is missing" in result.stderr
+    assert "pip install -r" in result.stderr
+    assert "Traceback" not in result.stderr
 
 
 def skill(tmp_path: Path, text: str = "old\n") -> Path:

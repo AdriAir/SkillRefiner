@@ -12,6 +12,24 @@ import os
 import sys
 from pathlib import Path
 
+from refinerlib.runtime import runtime_issues
+
+
+_RUNTIME_ISSUES = runtime_issues()
+if _RUNTIME_ISSUES:
+    sys.stderr.write("Skill Refiner cannot start:\n")
+    for _issue in _RUNTIME_ISSUES:
+        sys.stderr.write("- " + _issue + "\n")
+    sys.stderr.write(
+        "Use Python 3.12+ and install the pinned requirements into that interpreter:\n"
+        "  <python-3.12-interpreter> -m pip install -r "
+        + str(Path(__file__).resolve().parent / "requirements.txt")
+        + "\n"
+        "Replace <python-3.12-interpreter> with the absolute Python 3.12+ executable path.\n"
+        "Then configure Codex to use that same absolute interpreter path.\n"
+    )
+    raise SystemExit(2)
+
 from refinerlib.analysis import analyze, semantic_payload
 from refinerlib.common import RefinerError, canonical, ensure_outside, read_json, redact, redact_tree, reject_links
 from refinerlib.contracts import validate_contract

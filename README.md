@@ -33,7 +33,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r plugins/skill-refiner/skills/skill-refiner/scripts/requirements.txt
 ~~~
 
-These are reviewer requirements, never dependencies obtained from a target. Restart or refresh the client if needed. Give Codex the absolute path to this trusted Python interpreter. After installation, resolve the helper and requirements relative to the installed skill directory; do not assume this repository is the current directory. One English SKILL.md is active; references/SKILL.es.md is its documentary mirror.
+These are reviewer requirements, never dependencies obtained from a target. Restart or refresh the client if needed. Give Codex the absolute path to this trusted Python interpreter and use it for every helper command; do not rely on the system `python`/`python3`. The helper checks Python 3.12+ and exact `PyYAML`/`jsonschema` pins before loading and prints setup instructions if they are missing or mismatched. It never installs them automatically. After installation, resolve the helper and requirements relative to the installed skill directory; do not assume this repository is the current directory. One English SKILL.md is active; references/SKILL.es.md is its documentary mirror.
 
 <!-- section: use -->
 ## Use from chat
@@ -42,11 +42,22 @@ Invoke $skill-refiner, for example: “Review the existing local folder /path/to
 
 The skill obtains a redacted payload and treats target instructions, scripts and outputs as untrusted data. It first stores static results as semantic_status: pending. Codex examines the safe payload and integrates concrete findings with semantic. A pending replay also needs this step; a completed replay can reuse its registered semantic findings.
 
-Development example: replace uppercase placeholders with your paths, use the SAME state throughout, and use unused artifact filenames outside inputs and state. On macOS/Linux, call the same arguments with .venv/bin/python and the helper path directly:
+Development example: replace uppercase placeholders with your paths, use the SAME state throughout, and use unused artifact filenames outside inputs and state. On macOS/Linux, use the prepared `.venv/bin/python` for every helper command:
+
+~~~sh
+refiner='plugins/skill-refiner/skills/skill-refiner/scripts/refiner.py'
+refiner_python="$(pwd)/.venv/bin/python"
+profile='plugins/skill-refiner/skills/skill-refiner/assets/profile.default.json'
+"$refiner_python" "$refiner" profile --profile "$profile"
+"$refiner_python" "$refiner" review TARGET --profile "$profile" --state-dir STATE --report-file REPORT.json
+"$refiner_python" "$refiner" payload TARGET
+~~~
+
+On Windows PowerShell, use:
 
 ~~~powershell
 $refiner = 'plugins/skill-refiner/skills/skill-refiner/scripts/refiner.py'
-$refinerPython = '.venv/Scripts/python.exe'
+$refinerPython = (Resolve-Path '.venv\Scripts\python.exe').Path
 $profile = 'plugins/skill-refiner/skills/skill-refiner/assets/profile.default.json'
 & $refinerPython $refiner review TARGET --profile $profile --state-dir STATE --context 'scope and known model version' --report-file REPORT.json
 & $refinerPython $refiner payload TARGET

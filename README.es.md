@@ -33,7 +33,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r plugins/skill-refiner/skills/skill-refiner/scripts/requirements.txt
 ~~~
 
-Son requisitos del revisor, nunca dependencias obtenidas de una entrada. Reinicia o actualiza el cliente si hace falta. Proporciona a Codex la ruta absoluta a este intérprete Python confiable. Tras instalar, resuelve el helper y los requisitos respecto a la carpeta de la skill instalada; no presupongas que este repositorio sea el directorio actual. Hay un único SKILL.md activo en inglés; references/SKILL.es.md es su espejo documental.
+Son requisitos del revisor, nunca dependencias obtenidas de una entrada. Reinicia o actualiza el cliente si hace falta. Proporciona a Codex la ruta absoluta a este intérprete Python confiable y úsalo en cada comando del helper; no dependas del `python`/`python3` del sistema. El helper comprueba Python 3.12+ y las versiones exactas de `PyYAML`/`jsonschema` antes de cargarse, e indica cómo preparar el entorno si faltan o no coinciden. Nunca las instala automáticamente. Tras instalar, resuelve el helper y los requisitos respecto a la carpeta de la skill instalada; no presupongas que este repositorio sea el directorio actual. Hay un único SKILL.md activo en inglés; references/SKILL.es.md es su espejo documental.
 
 <!-- section: use -->
 ## Uso desde el chat
@@ -42,11 +42,22 @@ Invoca $skill-refiner, por ejemplo: «Revisa la carpeta local existente /ruta/a/
 
 La skill obtiene un payload redactado y trata las instrucciones, scripts y salidas de la entrada como datos no confiables. Primero guarda los resultados estáticos con semantic_status: pending. Codex examina el contenido seguro e integra hallazgos concretos con semantic. Una reutilización pendiente también necesita este paso; una completada puede reutilizar sus hallazgos semánticos registrados.
 
-Ejemplo de desarrollo: sustituye los marcadores en mayúsculas por tus rutas, usa el MISMO estado durante todo el flujo y nombres de artefactos nuevos fuera de las entradas y del estado. En macOS/Linux, llama a los mismos argumentos con .venv/bin/python y la ruta del helper directamente:
+Ejemplo de desarrollo: sustituye los marcadores en mayúsculas por tus rutas, usa el MISMO estado durante todo el flujo y nombres de artefactos nuevos fuera de las entradas y del estado. En macOS/Linux, usa `.venv/bin/python` preparado en cada comando del helper:
+
+~~~sh
+refiner='plugins/skill-refiner/skills/skill-refiner/scripts/refiner.py'
+refiner_python="$(pwd)/.venv/bin/python"
+profile='plugins/skill-refiner/skills/skill-refiner/assets/profile.default.json'
+"$refiner_python" "$refiner" profile --profile "$profile"
+"$refiner_python" "$refiner" review TARGET --profile "$profile" --state-dir STATE --report-file REPORT.json
+"$refiner_python" "$refiner" payload TARGET
+~~~
+
+En Windows PowerShell:
 
 ~~~powershell
 $refiner = 'plugins/skill-refiner/skills/skill-refiner/scripts/refiner.py'
-$refinerPython = '.venv/Scripts/python.exe'
+$refinerPython = (Resolve-Path '.venv\Scripts\python.exe').Path
 $profile = 'plugins/skill-refiner/skills/skill-refiner/assets/profile.default.json'
 & $refinerPython $refiner review TARGET --profile $profile --state-dir STATE --context 'scope and known model version' --report-file REPORT.json
 & $refinerPython $refiner payload TARGET
